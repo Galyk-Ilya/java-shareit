@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserStorage userStorage ;
+    private final UserStorage userStorage;
 
     public User createUser(User user) {
         checkEmail(user);
