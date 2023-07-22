@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.mapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
+
 @Component
 public class UserMapper {
 
@@ -13,6 +14,7 @@ public class UserMapper {
                 user.getEmail()
         );
     }
+
     public static User toUser(UserDto userDto) {
         return new User(
                 userDto.getId(),
