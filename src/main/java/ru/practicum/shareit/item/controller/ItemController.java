@@ -69,10 +69,12 @@ public class ItemController {
                 .collect(Collectors.toList());
     }
 
+
     @PostMapping("/{itemId}/comment")
     public CommentDto createComment(@RequestHeader("X-Sharer-User-Id") long userId,
                                     @PathVariable long itemId,
                                     @Valid @RequestBody Comment comment) {
         return commentMapper.toCommentDto(itemService.createComment(userId, itemId, comment));
     }
+}
 }
