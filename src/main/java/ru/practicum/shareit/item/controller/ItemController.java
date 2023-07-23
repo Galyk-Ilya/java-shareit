@@ -77,4 +77,3 @@ public class ItemController {
         return commentMapper.toCommentDto(itemService.createComment(userId, itemId, comment));
     }
 }
-}
