@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -46,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item getItemById(long itemId, long userId) {
         Item item = getItemIfExistOrThrow(itemId);
-        item.setComments(commentRepository.findAllByItemId(itemId).stream()
+        item.setComments(commentRepository.findByItemId(itemId).stream()
                 .map(commentMapper::toCommentDto)
                 .collect(Collectors.toList()));
         List<Booking> bookings = bookingRepository.findByItemId(itemId);
@@ -89,8 +90,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getItemsByText(String text) {
-        if (text.isEmpty())
+        if (text.isEmpty()) {
             return List.of();
+        }
         return itemRepository.findItemsByText(text);
     }
 
@@ -117,8 +119,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void throwIfItemNotOwnedUser(long itemId, long userId) {
-        if (getItemIfExistOrThrow(itemId).getOwner() != userId)
+        if (getItemIfExistOrThrow(itemId).getOwner() != userId) {
             throw new NotFoundException("Item with id " + itemId + " was not found for user with id " + userId);
+        }
     }
 
     @Override
@@ -142,15 +145,16 @@ public class ItemServiceImpl implements ItemService {
 
     private Booking getNextBooking(List<Booking> bookings) {
         return bookings.stream()
-                .filter(b -> b.getStart().isAfter(LocalDateTime.now()) &&
+                .sorted((x, y) -> y.getStart().compareTo(x.getStart()))
+                .takeWhile(b -> b.getStart().isAfter(LocalDateTime.now()) &&
                         b.getStatus().equals(BookingStatus.APPROVED))
                 .min(Comparator.comparing(Booking::getStart))
                 .orElse(null);
     }
 
     private Booking getLastBooking(List<Booking> bookings) {
-        return bookings.stream()
-                .filter(b -> b.getStart().isBefore(LocalDateTime.now()) &&
+        return bookings.stream().sorted(Comparator.comparing(Booking::getStart))
+                .takeWhile(b -> b.getStart().isBefore(LocalDateTime.now()) &&
                         b.getStatus().equals(BookingStatus.APPROVED))
                 .max(Comparator.comparing(Booking::getStart))
                 .orElse(null);

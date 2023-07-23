@@ -1,8 +1,9 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
 
@@ -18,7 +19,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

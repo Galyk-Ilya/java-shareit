@@ -29,17 +29,16 @@ public class BookingServiceImpl implements BookingService {
         booking.setItem(itemService.getItemIfExistOrThrow(booking.getItem().getId()));
         booking.setStatus(BookingStatus.WAITING);
         if (booking.getItem().getOwner() == userId) {
-            throw new NotFoundException("Владелец не может забронировать свою вещь");
+            throw new NotFoundException("The owner cannot book his item");
         }
         if (booking.getItem().getAvailable().equals(false)) {
-            throw new BadRequestException("Вещь не доступна для заказа");
+            throw new BadRequestException("Item not available for order");
         }
         if (booking.getEnd().isBefore(booking.getStart()) || booking.getEnd().isEqual(booking.getStart())) {
-            throw new BadRequestException("Дата окончания бронирования не может быть " +
-                    "раньше даты начала бронирования или рана ей");
+            throw new BadRequestException("Booking end date cannot be earlier than booking start date or early");
         }
         booking.setStatus(BookingStatus.WAITING);
-        log.info("Пользователь с id: {} добавил предмет к бронированию с id: {}", userId, booking.getItem().getId());
+        log.info("User with id: {} added an item to the booking with id: {}", userId, booking.getItem().getId());
         return bookingRepository.save(booking);
     }
 
@@ -47,7 +46,7 @@ public class BookingServiceImpl implements BookingService {
         userService.getUserIfExistOrThrow(userId);
         Booking booking = getBookingIfExistOrThrow(bookingId);
         if (booking.getBooker().getId() != userId && booking.getItem().getOwner() != userId) {
-            throw new NotFoundException("Вы не являетесь владельцем бронирования или вещи");
+            throw new NotFoundException("You are not the owner of the booking or item");
         }
         return booking;
     }
@@ -55,17 +54,17 @@ public class BookingServiceImpl implements BookingService {
     public Booking approvedBooking(long userId, long bookingId, boolean approved) {
         Booking booking = getBookingById(bookingId, userId);
         if (booking.getItem().getOwner() != userId) {
-            throw new NotFoundException("У вас нет вещи с id " + booking.getItem().getId());
+            throw new NotFoundException("You don't have an item with id" + booking.getItem().getId());
         }
         if (booking.getStatus().equals(BookingStatus.APPROVED) && approved) {
-            throw new BadRequestException("Бронирование уже подтверждено");
+            throw new BadRequestException("Booking already confirmed");
         }
         if (approved) {
             booking.setStatus(BookingStatus.APPROVED);
         } else {
             booking.setStatus(BookingStatus.REJECTED);
         }
-        log.info("Изменение статуса бронирования");
+        log.info("Change of booking status");
         return bookingRepository.save(booking);
     }
 
@@ -117,7 +116,7 @@ public class BookingServiceImpl implements BookingService {
 
     private Booking getBookingIfExistOrThrow(long bookingId) {
         return bookingRepository.findById(bookingId).orElseThrow(() -> {
-            throw new NotFoundException("Бронирования с id " + bookingId + " не существует в системе");
+            throw new NotFoundException("Booking with id " + bookingId + " does not exist in the system");
         });
     }
 }

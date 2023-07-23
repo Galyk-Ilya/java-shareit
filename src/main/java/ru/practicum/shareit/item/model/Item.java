@@ -1,8 +1,9 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingShortDtoToItem;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -17,7 +18,8 @@ import javax.persistence.Transient;
 import java.util.Collections;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
