@@ -17,42 +17,42 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handlerNotFoundException(final NotFoundException e) {
-        log.info("Error 404: {}", e.getMessage());
+        log.warn("Error 404: {}", e.getMessage());
         return Map.of("Object not found", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handlerInternalException(final ExecutionControl.InternalException e) {
-        log.info("Error 500: {}", e.getMessage());
+        log.warn("Error 500: {}", e.getMessage());
         return Map.of("server error", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, String> handlerDublicateException(final DublicateException e) {
-        log.info("Error 409: {}", e.getMessage());
+        log.warn("Error 409: {}", e.getMessage());
         return Map.of("Error - data conflict", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerBadRequestException(final BadRequestException e) {
-        log.info("Error 400: {}", e.getMessage());
+        log.warn("Error 400: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerUnsupportedStatusException(final UnsupportedStatusException e) {
-        log.info("Error 500: {}", e.getMessage());
+        log.warn("Error 500: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerValidationException(final ValidationException e) {
-        log.info("Error 409: {}", e.getMessage());
+        log.warn("Error 409: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
