@@ -20,12 +20,11 @@ import ru.practicum.shareit.exception.IncorrectDateError;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
-import static ru.practicum.shareit.service.MyConstants.USER_ID;
-
 @RestController
 @RequestMapping(path = "/bookings")
 public class BookingController {
     private final BookingService bookingService;
+    private final String USER_ID = "X-Sharer-User-Id";
 
     @Autowired
     public BookingController(BookingService bookingService) {

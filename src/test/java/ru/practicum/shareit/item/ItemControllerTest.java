@@ -25,7 +25,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.shareit.service.MyConstants.USER_ID;
 
 @WebMvcTest(controllers = ItemController.class)
 public class ItemControllerTest {
@@ -37,6 +36,8 @@ public class ItemControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    private final String USER_ID = "X-Sharer-User-Id";
 
     ItemDto itemDto = ItemDto.builder()
             .id(1L)

@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.shareit.service.MyConstants.USER_ID;
 
 @WebMvcTest(controllers = ItemRequestController.class)
 public class ItemRequestControllerTest {
@@ -38,6 +37,8 @@ public class ItemRequestControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    private final String USER_ID = "X-Sharer-User-Id";
 
     User requestor = User.builder()
             .id(1L)

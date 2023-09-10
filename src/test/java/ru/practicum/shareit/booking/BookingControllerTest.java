@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.shareit.service.MyConstants.USER_ID;
 
 @WebMvcTest(controllers = BookingController.class)
 public class BookingControllerTest {
@@ -41,6 +40,8 @@ public class BookingControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    private final String USER_ID = "X-Sharer-User-Id";
 
     private BookingDto bookingDto;
 

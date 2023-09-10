@@ -21,17 +21,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
-import static ru.practicum.shareit.service.MyConstants.USER_ID;
-
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
 
     private final ItemService itemService;
+    private final String USER_ID = "X-Sharer-User-Id";
 
     @PostMapping
     public ItemDto createItem(@Valid @RequestBody ItemDto item,

@@ -19,13 +19,13 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.practicum.shareit.service.MyConstants.USER_ID;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
     private final ItemRequestService itemRequestService;
+
+    private final String USER_ID = "X-Sharer-User-Id";
 
     @PostMapping
     ItemRequestDto addRequest(@RequestHeader(value = USER_ID) Long idRequestor,
