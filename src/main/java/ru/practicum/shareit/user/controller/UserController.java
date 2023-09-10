@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -24,31 +22,29 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable Long id) {
-        return UserMapper.toUserDto(userService.getUserById(id));
-    }
-
-    @GetMapping
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers().stream()
-                .map(UserMapper::toUserDto)
-                .collect(Collectors.toList());
-    }
-
     @PostMapping
     public UserDto createUser(@Valid @RequestBody UserDto userDto) {
-        return UserMapper.toUserDto(userService.createUser(UserMapper.toUser(userDto)));
+        return userService.createUser(userDto);
     }
 
-    @PatchMapping("/{userId}")
-    public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
-        userDto.setId(userId);
-        return UserMapper.toUserDto(userService.updateUser(UserMapper.toUser(userDto)));
+    @PatchMapping("/{id}")
+    public UserDto updateUser(@PathVariable(name = "id") Long id,
+                              @RequestBody UserDto userDto) {
+        return userService.updateUser(id, userDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public Long deleteUser(@PathVariable(name = "id") Long id) {
+        return userService.deleteUser(id);
+    }
+
+    @GetMapping("/{id}")
+    public UserDto findUserById(@PathVariable(name = "id") Long id) {
+        return userService.findUserById(id);
+    }
+
+    @GetMapping
+    public List<UserDto> findUsers() {
+        return userService.findUsers();
     }
 }

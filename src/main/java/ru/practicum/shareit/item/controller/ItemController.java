@@ -1,8 +1,7 @@
 package ru.practicum.shareit.item.controller;
-import static ru.practicum.shareit.service.MyConstants.USER_ID;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,69 +11,69 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithComments;
-import ru.practicum.shareit.item.mapper.CommentMapper;
-import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.dto.ItemOwnerDto;
+import ru.practicum.shareit.item.dto.ItemPatchDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static ru.practicum.shareit.service.MyConstants.USER_ID;
+
+/**
+ * TODO Sprint add-controllers.
+ */
 @RestController
-@RequestMapping("/items")
 @RequiredArgsConstructor
+@RequestMapping("/items")
 public class ItemController {
+
     private final ItemService itemService;
-    private final ItemMapper itemMapper;
-    private final CommentMapper commentMapper;
 
     @PostMapping
-    public ItemDto createItem(@RequestHeader(USER_ID) long userId,
-                              @Valid @RequestBody ItemDto itemDto) {
-        return itemMapper.toItemDto(itemService.createItem(itemMapper.toItem(itemDto), userId));
+    public ItemDto createItem(@Valid @RequestBody ItemDto item,
+                              @RequestHeader(value = USER_ID) Long id) {
+        return itemService.createItem(item, id);
     }
 
-    @GetMapping("/{itemId}")
-    public ItemDtoWithComments getItemById(@RequestHeader(USER_ID) long userId,
-                                           @PathVariable long itemId) {
-        return itemMapper.toItemDtoWithComments(itemService.getItemById(itemId, userId));
+    @PatchMapping("/{id}")
+    public ItemPatchDto updateItem(@PathVariable(name = "id") Long idItem,
+                                   @Valid @RequestBody ItemPatchDto itemPatchDto,
+                                   @RequestHeader(value = USER_ID) Long idOwner) {
+        return itemService.updateItem(itemPatchDto, idItem, idOwner);
     }
 
-    @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader(USER_ID) long userId,
-                              @RequestBody ItemDto itemDto,
-                              @PathVariable long itemId) {
-        return itemMapper.toItemDto(itemService.updateItem(itemMapper.toItem(itemDto), userId, itemId));
-    }
-
-    @DeleteMapping("/{itemId}")
-    public void deleteItem(@PathVariable long itemId) {
-        itemService.deleteItem(itemId);
-    }
-
-    @GetMapping("/search")
-    public List<ItemDto> getItemsByText(@RequestParam String text) {
-        return itemService.getItemsByText(text).stream()
-                .map(itemMapper::toItemDto)
-                .collect(Collectors.toList());
+    @GetMapping("/{id}")
+    public ItemOwnerDto findItemById(@RequestHeader(value = USER_ID) Long idOwner,
+                                     @PathVariable(name = "id") Long id) {
+        return itemService.findItemById(idOwner, id);
     }
 
     @GetMapping
-    public List<ItemDtoWithComments> getAllItemsByUserId(@RequestHeader(USER_ID) long userId) {
-        return itemService.getAllItemsByUserId(userId).stream()
-                .map(itemMapper::toItemDtoWithComments)
-                .collect(Collectors.toList());
+    public List<ItemOwnerDto> findItemsByIdOwner(@RequestHeader(value = USER_ID) Long idOwner,
+                                                 @RequestParam(name = "from", defaultValue = "0")
+                                                 @Positive Integer index,
+                                                 @RequestParam(name = "size", defaultValue = "10")
+                                                 @Positive Integer size) {
+        return itemService.findItemsByIdOwner(idOwner, PageRequest.of(index, size));
     }
 
+    @GetMapping("/search")
+    public List<ItemDto> findItemsByText(@RequestParam String text,
+                                         @RequestParam(name = "from", defaultValue = "0")
+                                         @Positive Integer index,
+                                         @RequestParam(name = "size", defaultValue = "10")
+                                         @Positive Integer size) {
+        return itemService.findItemsByText(text, PageRequest.of(index, size));
+    }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto createComment(@RequestHeader(USER_ID) long userId,
-                                    @PathVariable long itemId,
-                                    @Valid @RequestBody Comment comment) {
-        return commentMapper.toCommentDto(itemService.createComment(userId, itemId, comment));
+    public CommentDto addComment(@RequestHeader(value = USER_ID) Long userId,
+                                 @PathVariable(name = "itemId") Long itemId,
+                                 @RequestBody CommentDto commentDto) {
+        return itemService.addComment(userId, itemId, commentDto);
     }
 }
