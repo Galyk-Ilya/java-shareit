@@ -23,9 +23,7 @@ import java.util.List;
 
 import static ru.practicum.shareit.service.MyConstants.USER_ID;
 
-/**
- * TODO Sprint add-controllers.
- */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
