@@ -43,7 +43,7 @@ public class BookingControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private final String USER_ID = "X-Sharer-User-Id";
 
     private BookingDto bookingDto;
 
@@ -110,7 +110,7 @@ public class BookingControllerTest {
                         .content(mapper.writeValueAsString(bookingDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1L)
+                        .header(USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(bookingDto.getId()), Long.class))
@@ -134,7 +134,7 @@ public class BookingControllerTest {
                         .content(mapper.writeValueAsString(bookingDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1L)
+                        .header(USER_ID, 1L)
                         .queryParam("approved", "true")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -157,7 +157,7 @@ public class BookingControllerTest {
                         .content(mapper.writeValueAsString(Arrays.asList(bookingDto)))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1L)
+                        .header(USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id", is(bookingDto.getId()), Long.class))
@@ -179,7 +179,7 @@ public class BookingControllerTest {
                         .content(mapper.writeValueAsString(Arrays.asList(bookingDto)))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1L)
+                        .header(USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id", is(bookingDto.getId()), Long.class))
@@ -201,7 +201,7 @@ public class BookingControllerTest {
                         .content(mapper.writeValueAsString(Arrays.asList(bookingDto)))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1L)
+                        .header(USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(bookingDto.getId()), Long.class))

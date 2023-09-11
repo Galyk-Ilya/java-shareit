@@ -38,7 +38,7 @@ public class ItemRequestControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private final String USER_ID = "X-Sharer-User-Id";
 
     User requestor = User.builder()
             .id(1L)
@@ -64,7 +64,7 @@ public class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1))
+                        .header(USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestDto.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(itemRequestDto.getDescription())))
@@ -85,7 +85,7 @@ public class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1))
+                        .header(USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id", is(itemRequestDto.getId()), Long.class))
                 .andExpect(jsonPath("$.[0].description", is(itemRequestDto.getDescription())))
@@ -106,7 +106,7 @@ public class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1))
+                        .header(USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id", is(itemRequestDto.getId()), Long.class))
                 .andExpect(jsonPath("$.[0].description", is(itemRequestDto.getDescription())))
@@ -127,7 +127,7 @@ public class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID_HEADER, 1))
+                        .header(USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestDto.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(itemRequestDto.getDescription())))
