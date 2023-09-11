@@ -39,7 +39,7 @@ public class ItemControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private final String USER_ID = "X-Sharer-User-Id";
+    private final String userId = "X-Sharer-User-Id";
 
     ItemDto itemDto = ItemDto.builder()
             .id(1L)
@@ -78,7 +78,7 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID, 1L))
+                        .header(userId, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(itemDto.getName())))
@@ -96,7 +96,7 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID, 1L))
+                        .header(userId, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemPatchDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(itemPatchDto.getName())))
@@ -114,7 +114,7 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID, 1L))
+                        .header(userId, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemOwnerDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(itemOwnerDto.getName())))
@@ -132,7 +132,7 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID, 1L))
+                        .header(userId, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id", is(itemOwnerDto.getId()), Long.class))
                 .andExpect(jsonPath("$.[0].name", is(itemOwnerDto.getName())))
@@ -150,7 +150,7 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID, 1L))
+                        .header(userId, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id", is(itemDto.getId()), Long.class))
                 .andExpect(jsonPath("$.[0].name", is(itemDto.getName())))
@@ -168,7 +168,7 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID, 1L))
+                        .header(userId, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(commentDto.getId()), Long.class))
                 .andExpect(jsonPath("$.text", is(commentDto.getText())))
