@@ -1,10 +1,9 @@
 package ru.practicum.shareit.user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,32 +11,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+
 
 @Getter
 @Setter
-@Builder
-@Entity
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user")
-    private Long id;
+    @Column(name = "id")
+    private long id;
 
-    @NotBlank(message = "The name cannot be empty")
-    @Column(name = "name_user", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @NotBlank(message = "The email field cannot be empty")
-    @Email(message = "Invalid email value entered")
-    @Column(name = "email_user", unique = true, nullable = false)
+    @Column(name = "email", nullable = false, length = 512, unique = true)
     private String email;
-
-    public User() {
-    }
 }

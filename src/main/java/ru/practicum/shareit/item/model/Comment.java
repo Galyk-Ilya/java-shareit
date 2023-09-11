@@ -1,10 +1,10 @@
-package ru.practicum.shareit.item.comment.model;
+package ru.practicum.shareit.item.model;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.shareit.item.model.Item;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.Column;
@@ -18,18 +18,20 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "comments")
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "comments")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id")
+    private long id;
 
-    @Column(name = "text")
+    @Column(nullable = false, length = 2000)
     private String text;
 
     @ManyToOne
@@ -40,17 +42,6 @@ public class Comment {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @Column(name = "create_date")
+    @Column(name = "created")
     private LocalDateTime created;
-
-    public Comment(Long id, String text, Item item, User author, LocalDateTime created) {
-        this.id = id;
-        this.text = text;
-        this.item = item;
-        this.author = author;
-        this.created = created;
-    }
-
-    public Comment() {
-    }
 }

@@ -1,18 +1,13 @@
 package ru.practicum.shareit.exception;
 
-import lombok.Data;
-
-@Data
 public class ErrorResponse {
-    String error;
-    String description;
-
-    public ErrorResponse(String error, String description) {
-        this.error = error;
-        this.description = description;
-    }
+    private final String error;
 
     public ErrorResponse(String error) {
         this.error = error;
+    }
+
+    public String getError() {
+        return error;
     }
 }
