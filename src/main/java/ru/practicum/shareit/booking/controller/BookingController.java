@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 public class BookingController {
     private final BookingService bookingService;
-    private final String userId = "X-Sharer-User-Id";
+    private final String userIdHeader = "X-Sharer-User-Id";
 
     @Autowired
     public BookingController(BookingService bookingService) {
@@ -32,20 +32,20 @@ public class BookingController {
     }
 
     @PostMapping
-    public BookingDto createBooking(@RequestHeader(value = userId) Long idBooker,
+    public BookingDto createBooking(@RequestHeader(value = userIdHeader) Long idBooker,
                                     @RequestBody BookingEnterDto bookingEnterDto) {
         return bookingService.createBooking(idBooker, bookingEnterDto);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto changeApproved(@RequestHeader(value = userId) Long idOwner,
+    public BookingDto changeApproved(@RequestHeader(value = userIdHeader) Long idOwner,
                                      @PathVariable("bookingId") Long bookingId,
                                      @RequestParam("approved") Boolean approved) {
         return bookingService.approvedBooking(bookingId, idOwner, approved);
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> findAllBookingsByIdOwner(@RequestHeader(value = userId) Long idOwner,
+    public List<BookingDto> findAllBookingsByIdOwner(@RequestHeader(value = userIdHeader) Long idOwner,
                                                      @RequestParam(value = "state", defaultValue = "ALL")
                                                      String state,
                                                      @RequestParam(name = "from", defaultValue = "0")
@@ -56,7 +56,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDto> findAllBookingsByIdUser(@RequestHeader(value = userId) Long idUser,
+    public List<BookingDto> findAllBookingsByIdUser(@RequestHeader(value = userIdHeader) Long idUser,
                                                     @RequestParam(value = "state", defaultValue = "ALL")
                                                     String state,
                                                     @RequestParam(name = "from", defaultValue = "0")
@@ -71,7 +71,7 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDto findBookingById(@RequestHeader(value = userId) Long idUser,
+    public BookingDto findBookingById(@RequestHeader(value = userIdHeader) Long idUser,
                                       @PathVariable Long bookingId) {
         return bookingService.findBookingById(idUser, bookingId);
     }

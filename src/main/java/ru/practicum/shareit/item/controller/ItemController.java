@@ -27,29 +27,29 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
-    private final String userId = "X-Sharer-User-Id";
+    private final String userIdHeader = "X-Sharer-User-Id";
 
     @PostMapping
     public ItemDto createItem(@Valid @RequestBody ItemDto item,
-                              @RequestHeader(value = userId) Long id) {
+                              @RequestHeader(value = userIdHeader) Long id) {
         return itemService.createItem(item, id);
     }
 
     @PatchMapping("/{id}")
     public ItemPatchDto updateItem(@PathVariable(name = "id") Long idItem,
                                    @Valid @RequestBody ItemPatchDto itemPatchDto,
-                                   @RequestHeader(value = userId) Long idOwner) {
+                                   @RequestHeader(value = userIdHeader) Long idOwner) {
         return itemService.updateItem(itemPatchDto, idItem, idOwner);
     }
 
     @GetMapping("/{id}")
-    public ItemOwnerDto findItemById(@RequestHeader(value = userId) Long idOwner,
+    public ItemOwnerDto findItemById(@RequestHeader(value = userIdHeader) Long idOwner,
                                      @PathVariable(name = "id") Long id) {
         return itemService.findItemById(idOwner, id);
     }
 
     @GetMapping
-    public List<ItemOwnerDto> findItemsByIdOwner(@RequestHeader(value = userId) Long idOwner,
+    public List<ItemOwnerDto> findItemsByIdOwner(@RequestHeader(value = userIdHeader) Long idOwner,
                                                  @RequestParam(name = "from", defaultValue = "0")
                                                  @Positive Integer index,
                                                  @RequestParam(name = "size", defaultValue = "10")
@@ -67,7 +67,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment(@RequestHeader(value = userId) Long userId,
+    public CommentDto addComment(@RequestHeader(value = userIdHeader) Long userId,
                                  @PathVariable(name = "itemId") Long itemId,
                                  @RequestBody CommentDto commentDto) {
         return itemService.addComment(userId, itemId, commentDto);
