@@ -1,54 +1,56 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.dto.BookingShortDtoToItem;
-import ru.practicum.shareit.item.dto.CommentDto;
+import lombok.Setter;
+import lombok.ToString;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.util.Collections;
-import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "items")
+@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Item {
     @Id
+    @Column(name = "id_item")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    private Long id;
 
-    @Column(name = "name", nullable = false)
+    @NotBlank(message = "The name cannot be empty")
+    @Column(name = "name_item")
     private String name;
 
-    @Column(name = "description", nullable = false, length = 1024)
+    @NotBlank(message = "Description must be filled in")
     private String description;
 
-    @Column(name = "available", nullable = false)
+    @NotNull(message = "The item availability field is not checked")
     private Boolean available;
 
-    @Column(name = "owner_id", nullable = false)
-    private Long owner;
+    @ManyToOne
+    @JoinColumn(name = "owner")
+    private User owner;
 
-    @Transient
-    private BookingShortDtoToItem lastBooking;
-
-    @Transient
-    private BookingShortDtoToItem nextBooking;
-
-    @Transient
-    private List<CommentDto> comments = Collections.emptyList();
+    @ManyToOne
+    @JoinColumn(name = "request_id")
+    private ItemRequest request;
 }
