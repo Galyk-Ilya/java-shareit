@@ -48,7 +48,7 @@ public class UserTest {
     }
 
     @Test
-    void userNoNameTest() {
+    void userNoNameTest() throws Exception {
         user.setName(null);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
@@ -57,7 +57,7 @@ public class UserTest {
     }
 
     @Test
-    void userNameIsBlankTest() {
+    void userNameIsBlankTest() throws Exception {
         user.setName(" ");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
@@ -66,7 +66,7 @@ public class UserTest {
     }
 
     @Test
-    void userNameIsEmptyTest() {
+    void userNameIsEmptyTest() throws Exception {
         user.setName("");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
@@ -75,7 +75,7 @@ public class UserTest {
     }
 
     @Test
-    void userEmailIsNullTest() {
+    void userEmailIsNullTest() throws Exception {
         user.setEmail(null);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
@@ -84,7 +84,7 @@ public class UserTest {
     }
 
     @Test
-    void userEmailIsBlank() {
+    void userEmailIsBlank() throws Exception {
         user.setEmail("");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
@@ -93,11 +93,13 @@ public class UserTest {
     }
 
     @Test
-    void userEmailIsWrong() {
+    void userEmailIsWrong() throws Exception {
         user.setEmail("useremail5");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         assertThat(violations).isNotEmpty();
         assertThat(violations.toString()).contains("interpolatedMessage='Invalid email value entered'");
     }
-}
+    }
+
+

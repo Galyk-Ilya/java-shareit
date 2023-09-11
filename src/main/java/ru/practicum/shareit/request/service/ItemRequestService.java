@@ -14,4 +14,5 @@ public interface ItemRequestService {
     List<ItemRequestDto> findAllForeignRequests(Long idUser, Pageable pageable);
 
     ItemRequestDto findRequestById(Long idRequest, Long idUser);
+
 }
