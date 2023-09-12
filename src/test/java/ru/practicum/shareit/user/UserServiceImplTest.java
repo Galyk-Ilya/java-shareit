@@ -30,6 +30,9 @@ public class UserServiceImplTest {
     @Autowired
     private final UserService userService;
 
+    @Autowired
+    private final UserMapper userMapper;
+
     @MockBean
     private final UserRepository userRepository;
 
@@ -46,7 +49,7 @@ public class UserServiceImplTest {
                 .email("user1@test.ru")
                 .build();
 
-        when(userRepository.save(UserMapper.toUser(user)))
+        when(userRepository.save(userMapper.toUser(user)))
                 .thenReturn(userCreate);
 
         UserDto ans = userService.createUser(user);

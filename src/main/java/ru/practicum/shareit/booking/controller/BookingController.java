@@ -46,8 +46,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingDto> findAllBookingsByIdOwner(@RequestHeader(value = userIdHeader) Long idOwner,
-                                                     @RequestParam(value = "state", defaultValue = "ALL")
-                                                     String state,
+                                                     @RequestParam(value = "state", defaultValue = "ALL") String state,
                                                      @RequestParam(name = "from", defaultValue = "0")
                                                      @Positive Integer page,
                                                      @RequestParam(name = "size", defaultValue = "10")
@@ -57,8 +56,7 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> findAllBookingsByIdUser(@RequestHeader(value = userIdHeader) Long idUser,
-                                                    @RequestParam(value = "state", defaultValue = "ALL")
-                                                    String state,
+                                                    @RequestParam(value = "state", defaultValue = "ALL") String state,
                                                     @RequestParam(name = "from", defaultValue = "0")
                                                     @Positive Integer page,
                                                     @RequestParam(name = "size", defaultValue = "10")

@@ -31,15 +31,18 @@ import java.util.stream.Collectors;
 public class BookingServiceImpl implements BookingService {
 
     @Autowired
-    public BookingServiceImpl(BookingRepository bookingRepository, UserRepository userRepository, ItemRepository itemRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, UserRepository userRepository, ItemRepository itemRepository, BookingMapper bookingMapper) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
+        this.bookingMapper = bookingMapper;
     }
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+
+    private final BookingMapper bookingMapper;
 
     @Override
     @Transactional
@@ -68,8 +71,8 @@ public class BookingServiceImpl implements BookingService {
             throw new IncorrectDateError("The time is not set correctly.");
         }
 
-        Booking savedBooker = bookingRepository.save(BookingMapper.toBookingForCreate(item, booker, bookingEnterDto));
-        return BookingMapper.toBookingDto(savedBooker);
+        Booking savedBooker = bookingRepository.save(bookingMapper.toBookingForCreate(item, booker, bookingEnterDto));
+        return bookingMapper.toBookingDto(savedBooker);
     }
 
     @Override
@@ -89,19 +92,18 @@ public class BookingServiceImpl implements BookingService {
         }
 
         if (item.getOwner().getId().equals(idOwner)) {
-            if (status) {
-                bookingRepository.approvedBooking(Status.APPROVED, idBooking);
-                booking.setStatus(Status.APPROVED);
-                return BookingMapper.toBookingDto(bookingRepository.getById(idBooking));
-            } else {
+            if (!status) {
                 bookingRepository.approvedBooking(Status.REJECTED, idBooking);
                 booking.setStatus(Status.REJECTED);
-                return BookingMapper.toBookingDto(bookingRepository.getById(idBooking));
+                return bookingMapper.toBookingDto(bookingRepository.getById(idBooking));
             }
-        } else {
-            throw new NotFoundException("You don't have enough rights.");
+            bookingRepository.approvedBooking(Status.APPROVED, idBooking);
+            booking.setStatus(Status.APPROVED);
+            return bookingMapper.toBookingDto(bookingRepository.getById(idBooking));
         }
+        throw new NotFoundException("You don't have enough rights.");
     }
+
 
     @Override
     @Transactional
@@ -112,8 +114,8 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new NotFoundException("Booking with id: " + idBooking + " does not exist."));
 
         Optional<Item> item = itemRepository.findById(booking.getItem().getId());
-        if (booking.getBooker().getId().equals(idUser) || item.get().getOwner().getId().equals(idUser)) {
-            return BookingMapper.toBookingDto(booking);
+        if (item.isPresent() && (booking.getBooker().getId().equals(idUser) || item.get().getOwner().getId().equals(idUser))) {
+            return bookingMapper.toBookingDto(booking);
         } else {
             throw new NotFoundException("You don't have enough rights.");
         }
@@ -150,7 +152,7 @@ public class BookingServiceImpl implements BookingService {
                 break;
         }
         return bookings.stream()
-                .map(BookingMapper::toBookingDto).collect(Collectors.toList());
+                .map(bookingMapper::toBookingDto).collect(Collectors.toList());
     }
 
     @Override
@@ -162,42 +164,38 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings = new ArrayList<>();
         switch (state) {
             case ALL:
-                bookings.addAll(bookingRepository.findByItem_Owner_IdOrderByStartDesc(idOwner, pageable).getContent());
+                bookings.addAll(bookingRepository.findByItemOwnerIdOrderByStartDesc(idOwner, pageable).getContent());
                 break;
             case WAITING:
-                bookings.addAll(bookingRepository.findByItem_Owner_IdAndStatusOrderByStartDesc(idOwner, Status.WAITING, pageable).getContent());
+                bookings.addAll(bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(idOwner, Status.WAITING, pageable).getContent());
                 break;
             case REJECTED:
-                bookings.addAll(bookingRepository.findByItem_Owner_IdAndStatusOrderByStartDesc(idOwner, Status.REJECTED, pageable).getContent());
+                bookings.addAll(bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(idOwner, Status.REJECTED, pageable).getContent());
                 break;
             case CURRENT:
-                bookings.addAll(bookingRepository.findAllByItem_Owner_IdAndStartIsBeforeAndEndIsAfter(idOwner, LocalDateTime.now(), LocalDateTime.now(), pageable).getContent());
+                bookings.addAll(bookingRepository.findAllByItemOwnerIdAndStartIsBeforeAndEndIsAfter(idOwner, LocalDateTime.now(), LocalDateTime.now(), pageable).getContent());
                 break;
             case PAST:
-                bookings.addAll(bookingRepository.findAllByItem_Owner_IdAndEndIsBeforeOrderByStartDesc(idOwner, LocalDateTime.now(), pageable).getContent());
+                bookings.addAll(bookingRepository.findAllByItemOwnerIdAndEndIsBeforeOrderByStartDesc(idOwner, LocalDateTime.now(), pageable).getContent());
                 break;
             case FUTURE:
-                bookings.addAll(bookingRepository.findAllByItem_Owner_IdAndStartIsAfter(idOwner, LocalDateTime.now(), pageable).getContent());
+                bookings.addAll(bookingRepository.findAllByItemOwnerIdAndStartIsAfter(idOwner, LocalDateTime.now(), pageable).getContent());
                 break;
         }
         return bookings.stream()
-                .map(BookingMapper::toBookingDto).collect(Collectors.toList());
+                .map(bookingMapper::toBookingDto).collect(Collectors.toList());
     }
 
     private BookingState validationState(String stringState) {
-        BookingState state;
         try {
-            state = BookingState.valueOf(stringState);
+            return BookingState.valueOf(stringState);
         } catch (RuntimeException e) {
             throw new StatusErrorException("Unknown state: " + stringState);
         }
-        return state;
     }
 
-    private boolean userValidateExist(Long idUser) {
-        if (userRepository.existsById(idUser)) {
-            return true;
-        } else {
+    private void userValidateExist(Long idUser) {
+        if (!userRepository.existsById(idUser)) {
             throw new NotFoundException("There is no user with id: " + idUser);
         }
     }

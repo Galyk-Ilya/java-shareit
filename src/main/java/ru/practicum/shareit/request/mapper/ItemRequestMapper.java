@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 @Component
 public class ItemRequestMapper {
-    public static ItemRequestDto toItemRequestDto(ItemRequest request) {
+    public ItemRequestDto toItemRequestDto(ItemRequest request) {
         return ItemRequestDto.builder()
                 .id(request.getId())
                 .description(request.getDescription())
@@ -19,7 +19,7 @@ public class ItemRequestMapper {
                 .build();
     }
 
-    public static ItemRequest toItemRequest(ItemRequestDto requestDto, User requestor) {
+    public ItemRequest toItemRequest(ItemRequestDto requestDto, User requestor) {
         return ItemRequest.builder()
                 .id(requestDto.getId())
                 .description(requestDto.getDescription())

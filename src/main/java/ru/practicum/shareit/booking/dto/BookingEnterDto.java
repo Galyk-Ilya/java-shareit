@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class BookingEnterDto {
-    LocalDateTime start;
-    LocalDateTime end;
-    Long itemId;
-    Long bookerId;
-    Status status;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private Long itemId;
+    private Long bookerId;
+    private Status status;
 }

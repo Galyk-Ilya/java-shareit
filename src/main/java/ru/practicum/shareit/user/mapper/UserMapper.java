@@ -2,12 +2,14 @@ package ru.practicum.shareit.user.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserMapper {
 
@@ -19,7 +21,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static List<UserDto> toUserDto(Iterable<User> users) {
+    public List<UserDto> toUserDto(Iterable<User> users) {
         List<UserDto> ans = new ArrayList<>();
         for (User user : users) {
             ans.add(UserMapper.toUserDto(user));
@@ -27,14 +29,14 @@ public class UserMapper {
         return ans;
     }
 
-    public static User toUser(UserDto userDto) {
+    public User toUser(UserDto userDto) {
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         return user;
     }
 
-    public static User toUpdateUser(UserDto updateUserDto, UserDto user) {
+    public User toUpdateUser(UserDto updateUserDto, UserDto user) {
         if (user.getName() != null) {
             updateUserDto.setName(user.getName());
         }

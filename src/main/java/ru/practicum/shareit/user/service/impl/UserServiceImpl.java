@@ -21,6 +21,8 @@ class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private Pattern emailPattern = Pattern.compile("^.+@.+\\..+$");
 
+    private final UserMapper userMapper;
+
     @Override
     public UserDto createUser(UserDto userDto) {
         if (userDto.getEmail() == null || userDto.getEmail().isEmpty()
@@ -30,7 +32,7 @@ class UserServiceImpl implements UserService {
         if (userDto.getName() == null || userDto.getName().isEmpty() || userDto.getName().isBlank()) {
             throw new IncorrectDateError("The name field is filled in incorrectly.");
         }
-        User userCreated = userRepository.save(UserMapper.toUser(userDto));
+        User userCreated = userRepository.save(userMapper.toUser(userDto));
         return UserMapper.toUserDto(userCreated);
     }
 
@@ -43,7 +45,7 @@ class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findUsers() {
         List<User> users = userRepository.findAll();
-        return UserMapper.toUserDto(users);
+        return userMapper.toUserDto(users);
     }
 
     @Override
@@ -59,7 +61,7 @@ class UserServiceImpl implements UserService {
         User interimUser = userRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("The user with id = " + id + " does not exist."));
         UserDto updateUserDto = UserMapper.toUserDto(interimUser);
-        User updateUser = UserMapper.toUpdateUser(updateUserDto, user);
+        User updateUser = userMapper.toUpdateUser(updateUserDto, user);
         userRepository.save(updateUser);
         return UserMapper.toUserDto(updateUser);
     }

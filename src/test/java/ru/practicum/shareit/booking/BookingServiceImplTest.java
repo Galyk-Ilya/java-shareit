@@ -582,32 +582,32 @@ public class BookingServiceImplTest {
         when(userRepository.existsById(anyLong()))
                 .thenReturn(true);
 
-        when(bookingRepository.findByItem_Owner_IdOrderByStartDesc(any(), any()))
+        when(bookingRepository.findByItemOwnerIdOrderByStartDesc(any(), any()))
                 .thenReturn(new PageImpl<>(Arrays.asList(booking)));
         List<BookingDto> ansAll = bookingService.findAllBookingsByIdOwner(1L, "ALL", pageable);
         assertThat(ansAll, is(notNullValue()));
 
-        when(bookingRepository.findByItem_Owner_IdAndStatusOrderByStartDesc(any(), any(), any()))
+        when(bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(any(), any(), any()))
                 .thenReturn(new PageImpl<>(Arrays.asList(booking)));
         List<BookingDto> ansWaiting = bookingService.findAllBookingsByIdOwner(1L, "WAITING", pageable);
         assertThat(ansWaiting, is(notNullValue()));
 
-        when(bookingRepository.findByItem_Owner_IdAndStatusOrderByStartDesc(any(), any(), any()))
+        when(bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(any(), any(), any()))
                 .thenReturn(new PageImpl<>(Arrays.asList(booking)));
         List<BookingDto> ansRejected = bookingService.findAllBookingsByIdOwner(1L, "REJECTED", pageable);
         assertThat(ansRejected, is(notNullValue()));
 
-        when(bookingRepository.findAllByItem_Owner_IdAndStartIsBeforeAndEndIsAfter(any(), any(), any(), any()))
+        when(bookingRepository.findAllByItemOwnerIdAndStartIsBeforeAndEndIsAfter(any(), any(), any(), any()))
                 .thenReturn(new PageImpl<>(Arrays.asList(booking)));
         List<BookingDto> ansCurrent = bookingService.findAllBookingsByIdOwner(1L, "CURRENT", pageable);
         assertThat(ansCurrent, is(notNullValue()));
 
-        when(bookingRepository.findAllByItem_Owner_IdAndEndIsBeforeOrderByStartDesc(any(), any(), any()))
+        when(bookingRepository.findAllByItemOwnerIdAndEndIsBeforeOrderByStartDesc(any(), any(), any()))
                 .thenReturn(new PageImpl<>(Arrays.asList(booking)));
         List<BookingDto> ansPast = bookingService.findAllBookingsByIdOwner(1L, "PAST", pageable);
         assertThat(ansPast, is(notNullValue()));
 
-        when(bookingRepository.findAllByItem_Owner_IdAndStartIsAfter(any(), any(), any()))
+        when(bookingRepository.findAllByItemOwnerIdAndStartIsAfter(any(), any(), any()))
                 .thenReturn(new PageImpl<>(Arrays.asList(booking)));
         List<BookingDto> ansFuture = bookingService.findAllBookingsByIdOwner(1L, "FUTURE", pageable);
         assertThat(ansFuture, is(notNullValue()));

@@ -43,11 +43,12 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final ItemRequestRepository requestRepository;
+    private final ItemMapper itemMapper;
 
     @Override
     @Transactional
     public ItemDto createItem(ItemDto item, Long idUser) {
-        Item createdItem = ItemMapper.toItem(item);
+        Item createdItem = itemMapper.toItem(item);
 
         User user = userRepository.findById(idUser)
                 .orElseThrow(() -> new NotFoundException("The user with id = " + idUser + " does not exist."));
@@ -60,7 +61,7 @@ public class ItemServiceImpl implements ItemService {
 
         createdItem.setOwner(user);
         createdItem.setRequest(itemRequest);
-        return ItemMapper.toItemDto(itemRepository.save(createdItem));
+        return itemMapper.toItemDto(itemRepository.save(createdItem));
     }
 
     @Override
@@ -75,9 +76,9 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getId() == null || !idOwner.equals(updatedItem.getOwner().getId())) {
             throw new AccessErrorException("You don't have permission to edit");
         }
-        Item ans = ItemMapper.toUp(updatedItem, itemDto);
+        Item ans = itemMapper.toUp(updatedItem, itemDto);
         itemRepository.save(ans);
-        return ItemMapper.toItemPatchDto(ans);
+        return itemMapper.toItemPatchDto(ans);
     }
 
     @Override
@@ -89,34 +90,33 @@ public class ItemServiceImpl implements ItemService {
                 .map(CommentMapper::toCommentDto).collect(Collectors.toList());
 
         if (!idOwner.equals(item.getOwner().getId())) {
-            ItemOwnerDto ans = ItemMapper.toItemOwnerDto(item);
+            ItemOwnerDto ans = itemMapper.toItemOwnerDto(item);
             ans.setComments(commentsDto);
             return ans;
 
-        } else {
-            ItemOwnerDto ans = ItemMapper.toItemOwnerDto(item);
-
-            Optional<Booking> lastBooking = bookingRepository.findFirstByItemIdAndStatusAndStartBeforeOrderByStartDesc(
-                    id, Status.APPROVED, LocalDateTime.now());
-
-            ans.setLastBooking(lastBooking.map(booking -> LastBookingDto.builder()
-                    .id(booking.getId())
-                    .bookerId(booking.getBooker().getId())
-                    .start(booking.getStart())
-                    .end(booking.getEnd())
-                    .build()).orElse(null));
-            Optional<Booking> nextBooking = bookingRepository.findFirstByItemIdAndStatusAndStartAfterOrderByStartAsc(
-                    id, Status.APPROVED, LocalDateTime.now());
-
-            ans.setNextBooking(nextBooking.map(booking -> NextBookingDto.builder()
-                    .id(booking.getId())
-                    .bookerId(booking.getBooker().getId())
-                    .start(booking.getStart())
-                    .end(booking.getEnd())
-                    .build()).orElse(null));
-            ans.setComments(commentsDto);
-            return ans;
         }
+        ItemOwnerDto ans = itemMapper.toItemOwnerDto(item);
+
+        Optional<Booking> lastBooking = bookingRepository.findFirstByItemIdAndStatusAndStartBeforeOrderByStartDesc(
+                id, Status.APPROVED, LocalDateTime.now());
+
+        ans.setLastBooking(lastBooking.map(booking -> LastBookingDto.builder()
+                .id(booking.getId())
+                .bookerId(booking.getBooker().getId())
+                .start(booking.getStart())
+                .end(booking.getEnd())
+                .build()).orElse(null));
+        Optional<Booking> nextBooking = bookingRepository.findFirstByItemIdAndStatusAndStartAfterOrderByStartAsc(
+                id, Status.APPROVED, LocalDateTime.now());
+
+        ans.setNextBooking(nextBooking.map(booking -> NextBookingDto.builder()
+                .id(booking.getId())
+                .bookerId(booking.getBooker().getId())
+                .start(booking.getStart())
+                .end(booking.getEnd())
+                .build()).orElse(null));
+        ans.setComments(commentsDto);
+        return ans;
     }
 
     @Override
@@ -129,7 +129,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         List<ItemOwnerDto> itemOwnerDtoList = items.stream()
-                .map(ItemMapper::toItemOwnerDto)
+                .map(itemMapper::toItemOwnerDto)
                 .collect(Collectors.toList());
 
         for (ItemOwnerDto itemOwnerDto : itemOwnerDtoList) {
@@ -177,7 +177,7 @@ public class ItemServiceImpl implements ItemService {
         }
         return itemRepository.findItemsByText(text.toLowerCase(), pageable)
                 .stream()
-                .map(ItemMapper::toItemDto).collect(Collectors.toList());
+                .map(itemMapper::toItemDto).collect(Collectors.toList());
     }
 
     @Override

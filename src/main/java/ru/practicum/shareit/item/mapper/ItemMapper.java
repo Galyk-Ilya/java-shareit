@@ -14,7 +14,7 @@ import java.util.Optional;
 @Component
 public class ItemMapper {
 
-    public static Item toItem(ItemDto itemDto) {
+    public Item toItem(ItemDto itemDto) {
         return Item.builder()
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
@@ -22,7 +22,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public static ItemDto toItemDto(Item item) {
+    public ItemDto toItemDto(Item item) {
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -32,7 +32,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public static ItemPatchDto toItemPatchDto(Item item) {
+    public ItemPatchDto toItemPatchDto(Item item) {
         return ItemPatchDto.builder()
                 .id(item.getId())
                 .description(item.getDescription())
@@ -41,7 +41,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public static Item toUp(Item updateItem, ItemPatchDto itemDto) {
+    public Item toUp(Item updateItem, ItemPatchDto itemDto) {
         if (itemDto.getName() != null) {
             updateItem.setName(itemDto.getName());
         }
@@ -61,7 +61,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public static ItemOwnerDto toItemOwnerDto(Item item) {
+    public ItemOwnerDto toItemOwnerDto(Item item) {
         return ItemOwnerDto.builder()
                 .id(item.getId())
                 .name(item.getName())

@@ -38,14 +38,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Optional<Booking> findFirstByItemIdAndStatusAndStartAfterOrderByStartAsc(Long itemId, Status status, LocalDateTime time);
 
 
-    Page<Booking> findByItem_Owner_IdOrderByStartDesc(Long owner, Pageable pageable);
+    Page<Booking> findByItemOwnerIdOrderByStartDesc(Long owner, Pageable pageable);
 
-    Page<Booking> findByItem_Owner_IdAndStatusOrderByStartDesc(Long owner, Status status, Pageable pageable);
+    Page<Booking> findByItemOwnerIdAndStatusOrderByStartDesc(Long owner, Status status, Pageable pageable);
 
-    Page<Booking> findAllByItem_Owner_IdAndStartIsAfter(Long owner, LocalDateTime time, Pageable pageable);
+    Page<Booking> findAllByItemOwnerIdAndStartIsAfter(Long owner, LocalDateTime time, Pageable pageable);
 
-    Page<Booking> findAllByItem_Owner_IdAndStartIsBeforeAndEndIsAfter(Long owner, LocalDateTime time1,
-                                                                      LocalDateTime time, Pageable pageable);
+    Page<Booking> findAllByItemOwnerIdAndStartIsBeforeAndEndIsAfter(Long owner, LocalDateTime time1,
+                                                                    LocalDateTime time, Pageable pageable);
 
-    Page<Booking> findAllByItem_Owner_IdAndEndIsBeforeOrderByStartDesc(Long owner, LocalDateTime time, Pageable pageable);
+    Page<Booking> findAllByItemOwnerIdAndEndIsBeforeOrderByStartDesc(Long owner, LocalDateTime time, Pageable pageable);
 }

@@ -10,17 +10,17 @@ import javax.validation.constraints.Size;
 @Data
 @Builder
 public class ItemDto {
-    Long id;
+   private Long id;
 
     @NotBlank
     @Size(min = 1, max = 30)
-    String name;
+    private String name;
 
     @NotBlank
     @Size(min = 1, max = 30)
-    String description;
+    private String description;
 
     @NotNull
-    Boolean available;
-    Long requestId;
+    private Boolean available;
+    private Long requestId;
 }

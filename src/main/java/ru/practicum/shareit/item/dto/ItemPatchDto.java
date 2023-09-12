@@ -7,10 +7,10 @@ import ru.practicum.shareit.request.model.ItemRequest;
 @Data
 @Builder
 public class ItemPatchDto {
-    Long id;
-    String name;
-    String description;
-    Boolean available;
-    ItemRequest request;
-    Long owner;
+    private Long id;
+    private String name;
+    private String description;
+    private Boolean available;
+    private ItemRequest request;
+    private Long owner;
 }
