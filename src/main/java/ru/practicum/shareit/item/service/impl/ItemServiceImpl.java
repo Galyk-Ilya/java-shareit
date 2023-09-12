@@ -44,6 +44,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
     private final ItemRequestRepository requestRepository;
     private final ItemMapper itemMapper;
+    private final CommentMapper commentMapper;
 
     @Override
     @Transactional
@@ -87,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Things with id " + id + " do not exist."));
         List<CommentDto> commentsDto = commentRepository.findByItemId(item.getId()).stream()
-                .map(CommentMapper::toCommentDto).collect(Collectors.toList());
+                .map(commentMapper::toCommentDto).collect(Collectors.toList());
 
         if (!idOwner.equals(item.getOwner().getId())) {
             ItemOwnerDto ans = itemMapper.toItemOwnerDto(item);
@@ -135,7 +136,7 @@ public class ItemServiceImpl implements ItemService {
         for (ItemOwnerDto itemOwnerDto : itemOwnerDtoList) {
 
             List<CommentDto> commentsDto = commentRepository.findByItemId(itemOwnerDto.getId()).stream()
-                    .map(CommentMapper::toCommentDto).collect(Collectors.toList());
+                    .map(commentMapper::toCommentDto).collect(Collectors.toList());
             itemOwnerDto.setComments(commentsDto);
 
             Optional<Booking> lastBooking = bookingRepository.findFirstByItemIdAndStatusAndStartBeforeOrderByStartDesc(
@@ -193,12 +194,12 @@ public class ItemServiceImpl implements ItemService {
                 itemId, userId, LocalDateTime.now(), Status.APPROVED) == null) {
             throw new IncorrectDateError("You didn't book this item.");
         } else {
-            Comment comment = CommentMapper.toComment(commentDto, LocalDateTime.now());
+            Comment comment = commentMapper.toComment(commentDto, LocalDateTime.now());
             comment.setItem(item);
             comment.setAuthor(author);
 
             comment = commentRepository.save(comment);
-            return CommentMapper.toCommentDto(comment);
+            return commentMapper.toCommentDto(comment);
         }
     }
 }
