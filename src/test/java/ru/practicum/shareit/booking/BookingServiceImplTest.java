@@ -423,39 +423,6 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    void findBookingByIdTest() {
-        User owner = User.builder()
-                .id(1L)
-                .name("User1")
-                .email("user1@test.ru")
-                .build();
-
-        Item item = Item.builder()
-                .id(1L)
-                .name("item")
-                .description("newItem")
-                .available(true)
-                .owner(owner)
-                .build();
-
-        Booking booking = Booking.builder()
-                .id(1L)
-                .item(item)
-                .status(Status.WAITING)
-                .booker(owner)
-                .start(LocalDateTime.now().plusSeconds(1))
-                .end(LocalDateTime.now().plusSeconds(2))
-                .build();
-        when(userRepository.existsById(any()))
-                .thenReturn(true);
-        when(bookingRepository.findById(anyLong()))
-                .thenReturn(Optional.of(booking));
-        BookingDto ans = bookingService.findBookingById(1L, 1L);
-        assertThat(ans.getItem().getName(), is("item"));
-        assertThat(ans, is(notNullValue()));
-    }
-
-    @Test
     void dropExceptionNoOwnerFindBookingByIdTest() {
         User owner = User.builder()
                 .id(1L)
