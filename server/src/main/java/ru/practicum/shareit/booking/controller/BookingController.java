@@ -39,20 +39,16 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> findAllBookingsByIdOwner(@RequestHeader(value = userIdHeader) Long idOwner,
                                                      @RequestParam(value = "state", defaultValue = "ALL") String state,
-                                                     @RequestParam(name = "from", defaultValue = "0")
-                                                     @Positive Integer page,
-                                                     @RequestParam(name = "size", defaultValue = "10")
-                                                     @Positive Integer size) {
+                                                     @RequestParam(name = "from", defaultValue = "0") Integer page,
+                                                     @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return bookingService.findAllBookingsByIdOwner(idOwner, state, PageRequest.of(page, size, Sort.by("start").descending()));
     }
 
     @GetMapping
     public List<BookingDto> findAllBookingsByIdUser(@RequestHeader(value = userIdHeader) Long idUser,
                                                     @RequestParam(value = "state", defaultValue = "ALL") String state,
-                                                    @RequestParam(name = "from", defaultValue = "0")
-                                                    @Positive Integer page,
-                                                    @RequestParam(name = "size", defaultValue = "10")
-                                                    @Positive Integer size) {
+                                                    @RequestParam(name = "from", defaultValue = "0") Integer page,
+                                                    @RequestParam(name = "size", defaultValue = "10") Integer size) {
         if (page < 0) {
             throw new IncorrectDateError("");
         }
