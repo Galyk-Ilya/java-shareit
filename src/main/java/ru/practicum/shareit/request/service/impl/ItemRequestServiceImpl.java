@@ -1,8 +1,6 @@
 package ru.practicum.shareit.request.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.mapping.Collection;
-import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +20,6 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
