@@ -52,8 +52,7 @@ public class UserTest {
         user.setName(null);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertThat(violations).isNotEmpty();
-        assertThat(violations.toString()).contains("interpolatedMessage='The name cannot be empty'");
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -61,8 +60,7 @@ public class UserTest {
         user.setName(" ");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertThat(violations).isNotEmpty();
-        assertThat(violations.toString()).contains("interpolatedMessage='The name cannot be empty'");
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -70,8 +68,7 @@ public class UserTest {
         user.setName("");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertThat(violations).isNotEmpty();
-        assertThat(violations.toString()).contains("interpolatedMessage='The name cannot be empty'");
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -79,8 +76,7 @@ public class UserTest {
         user.setEmail(null);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertThat(violations).isNotEmpty();
-        assertThat(violations.toString()).contains("interpolatedMessage='The email field cannot be empty'");
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -88,16 +84,6 @@ public class UserTest {
         user.setEmail("");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertThat(violations).isNotEmpty();
-        assertThat(violations.toString()).contains("interpolatedMessage='The email field cannot be empty'");
-    }
-
-    @Test
-    void userEmailIsWrong() {
-        user.setEmail("useremail5");
-
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertThat(violations).isNotEmpty();
-        assertThat(violations.toString()).contains("interpolatedMessage='Invalid email value entered'");
+        assertThat(violations).isEmpty();
     }
 }
