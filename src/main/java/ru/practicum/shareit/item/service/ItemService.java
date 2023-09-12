@@ -1,25 +1,23 @@
 package ru.practicum.shareit.item.service;
 
-import ru.practicum.shareit.item.model.Comment;
-import ru.practicum.shareit.item.model.Item;
+import org.springframework.data.domain.Pageable;
+import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemOwnerDto;
+import ru.practicum.shareit.item.dto.ItemPatchDto;
 
 import java.util.List;
 
 public interface ItemService {
+    ItemDto createItem(ItemDto item, Long idUser);
 
-    Item createItem(Item item, long userId);
+    ItemPatchDto updateItem(ItemPatchDto itemPatchDto, Long idItem, Long idOwner);
 
-    Item getItemById(long itemId, long userId);
+    ItemOwnerDto findItemById(Long idOwner, Long id);
 
-    Item updateItem(Item item, long userId, long itemId);
+    List<ItemOwnerDto> findItemsByIdOwner(Long idOwner, Pageable pageable);
 
-    void deleteItem(long itemId);
+    List<ItemDto> findItemsByText(String text, Pageable pageable);
 
-    List<Item> getItemsByText(String text);
-
-    List<Item> getAllItemsByUserId(long userId);
-
-    Item getItemIfExistOrThrow(long itemId);
-
-    Comment createComment(long userId, long itemId, Comment comment);
+    CommentDto addComment(Long userId, Long itemId, CommentDto commentDto);
 }

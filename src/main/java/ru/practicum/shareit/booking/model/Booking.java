@@ -1,13 +1,12 @@
 package ru.practicum.shareit.booking.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
-
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,23 +20,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "bookings")
-@Getter
 @Setter
+@Getter
+@Entity
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "bookings")
 public class Booking {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     private LocalDateTime start;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     private LocalDateTime end;
 
     @ManyToOne
@@ -49,5 +47,17 @@ public class Booking {
     private User booker;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status;
+    @Column(name = "status")
+    private Status status;
+
+    public Booking(Item item, User booker, LocalDateTime start, LocalDateTime end, Status status) {
+        this.item = item;
+        this.booker = booker;
+        this.start = start;
+        this.end = end;
+        this.status = status;
+    }
+
+    public Booking() {
+    }
 }
