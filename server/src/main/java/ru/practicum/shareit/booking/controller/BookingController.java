@@ -9,7 +9,6 @@ import ru.practicum.shareit.booking.dto.BookingEnterDto;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.IncorrectDateError;
 
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController

@@ -5,6 +5,8 @@ import java.util.Optional;
 public enum BookingState {
 	ALL,
 	CURRENT,
+
+	FUTURE,
 	PAST,
 	REJECTED,
 	WAITING;
